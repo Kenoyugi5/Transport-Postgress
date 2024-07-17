@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>List Bookings</h1>
+
+{% for booking in bookings %}
+    {% if booking.approved %}
+        <div class="card">
+            <div class="card-header"><h5 class="card-header">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'show-booking' booking.id %}" class="link-dark link-offset-1 link-underline-opacity-25 link-underline-opacity-75-hover">
+                {% endif %}
+                    {{ booking }}</a></h5>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><strong>Trip Date:</strong> {{ booking.trip_date }} ({{ booking.Days_till }}) {% if booking.Is_Past %} ({{ booking.Is_Past }}) {% endif %}</h5>
+                <p class="card-text">
+                    <ul>
+                        <li><b>Teacher:</b> {{ booking.teacher }}</li>
+                        <li><b>Classes Involved:</b> {{ booking.class_involved }}</li>
+                        <li><b>Total No. of People:</b> {{ booking.no_of_people }}</li>
+                        <li><b>Destination:</b> {{ booking.destination }}</li>
+                        <li><b>Approved:</b> {{ booking.approved }}</li>
+                        <li><b>Name of Driver Assigned:</b>
+                        {% for driver in booking.driver.all %}
+                            {{ driver }} | {% endfor %}
+                        </li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+        <br>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}

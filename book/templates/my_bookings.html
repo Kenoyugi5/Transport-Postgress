@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <h2 class="text-center mb-4">My Bookings</h2>
+
+      {% if bookings %}
+        {% for booking in bookings %}
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5>
+                <a href="{% url 'show-booking' booking.id %}" class="link-dark link-offset-1 link-underline-opacity-25 link-underline-opacity-75-hover">
+                  {{ booking }}
+                </a>
+              </h5>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title"><strong>Trip Date:</strong> {{ booking.trip_date }} ({{ booking.Days_till }}) {% if booking.Is_Past %} (Past) {% endif %}</h5>
+              <ul class="list-unstyled">
+                <li><b>Classes Involved:</b> {{ booking.class_involved }}</li>
+                <li><b>Total No. of People:</b> {{ booking.no_of_people }}</li>
+                <li><b>Destination:</b> {{ booking.destination }}</li>
+                <li><b>Approved:</b> {% if booking.approved %}Yes  By: {{booking.approved_by}}{% else %}No{% endif %}</li>
+                <li><b>Name of Driver Assigned:</b>
+                  {% for driver in booking.driver.all %}
+                    {{ driver }}{% if not forloop.last %} | {% endif %}
+                  {% endfor %}
+                </li>
+              </ul>
+            </div>
+            <div class="card-footer text-body-secondary d-flex justify-content-between">
+              <div>
+                <a href="{% url 'update-booking' booking.id %}" class="btn btn-outline-secondary btn-sm">Update</a>
+                <a href="{% url 'delete-booking' booking.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Download</button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'spec_booking_text' booking.id %}">Text</a></li>
+                  <li><a class="dropdown-item" href="{% url 'spec_booking_csv' booking.id %}">CSV</a></li>
+                  <li><a class="dropdown-item" href="{% url 'spec_booking_pdf' booking.id %}">PDF</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No bookings have been made.</p>
+      {% endif %}
+
+        <!-- Pagination controls -->
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            {% if bookings.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page=1">&laquo; First</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ bookings.previous_page_number }}">Previous</a>
+              </li>
+            {% endif %}
+
+            {% for i in bookings.paginator.page_range %}
+              {% if bookings.number == i %}
+                <li class="page-item active">
+                  <span class="page-link">{{ i }}</span>
+                </li>
+              {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+
+            {% if bookings.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ bookings.next_page_number }}">Next</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ bookings.paginator.num_pages }}">Last &raquo;</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}

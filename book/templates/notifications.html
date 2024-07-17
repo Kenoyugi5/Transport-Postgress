@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">New Booking Notifications</h1>
+    {% if new_bookings %}
+        <ul class="list-group">
+            {% for booking in new_bookings %}
+                <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h5 class="card-title">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'show-booking' booking.id %}" class="link-dark">
+                        {% endif %}
+                        {{ booking }}</a>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-subtitle mb-2"><strong>Trip Date:</strong> {{ booking.trip_date }} ({{ booking.Days_till }}) {% if booking.Is_Past %} (Past) {% endif %}</h5>
+                    <ul class="list-unstyled">
+                        <li><b>Teacher:</b> {{ booking.teacher }}</li>
+                        <li><b>Classes Involved:</b> {{ booking.class_involved }}</li>
+                        <li><b>Total No. of People:</b> {{ booking.no_of_people }}</li>
+                        <li><b>Destination:</b> {{ booking.destination }}</li>
+                        <li><b>Approved:</b> {% if booking.approved %}Yes{% else %}No{% endif %}</li>
+                        <li><b>Name of Driver Assigned:</b>
+                            {% for driver in booking.driver.all %}
+                                {{ driver }}{% if not forloop.last %} | {% endif %}
+                            {% endfor %}
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <div>
+                        <a href="{% url 'approval' %}" class="btn btn-sm btn-outline-secondary">Approve</a>
+                        <form action="{% url 'mark_as_notified' booking.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary">Mark as Read</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No new booking notifications.</p>
+    {% endif %}
+</div>
+{% endblock %}

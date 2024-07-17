@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        {% if user == booking.teacher or user.is_superuser %}
+            <div class="container mt-5">
+                <h1 class="mb-4">Update Booking</h1>
+                <p>Teacher: {{ booking.teacher }}</p>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <br>
+                    <input type="submit" value="Update" class="btn btn-secondary">
+                </form>
+                <br>
+            </div>
+        {% else %}
+            <div class="container mt-5">
+                <h2>Access Denied</h2>
+                <p>Only the teacher who submitted this booking or an admin can update this booking.</p>
+                <p>Teacher: {{ booking.teacher }}</p>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="container mt-5">
+            <h1>Login to view page</h1>
+            <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+        </div>
+    {% endif %}
+{% endblock %}

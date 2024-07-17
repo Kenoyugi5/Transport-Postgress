@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<div class="card">
+		<div class="card-header"><h5 class="card-header">{{ driver.last_name }}</h5></div>
+		<div class="card-body">
+			<p class="card-text">
+    			<ul>
+					<li><b>First Name:</b> {{ driver.first_name }}</li>
+					<li><b>Last Name:</b> {{ driver.last_name }}</li>
+					<li><b>Phone Number:</b> {{ driver.phone }}</li>
+				</ul>
+				<br>
+				{% if driver.driver_image %}
+					<img src="{{ driver.driver_image.url }}">
+				{% endif %}
+    		</p>
+  		</div>
+	</div>
+
+{% endblock %}

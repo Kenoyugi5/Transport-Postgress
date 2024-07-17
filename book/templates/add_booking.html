@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    {% if user.is_authenticated %}
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h1 class="card-title">Booking of Transport</h1>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'add-booking' %}" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="text-center">
+                        <input type="submit" value="Submit" class="btn btn-success">
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center mt-5">
+            <h1>Login to View Page</h1>
+            <a class="btn btn-primary mt-3" href="{% url 'login' %}">Login</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

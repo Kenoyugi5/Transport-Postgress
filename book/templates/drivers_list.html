@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<h1>Drivers</h1>
+
+	{% for driver in driver_list %}
+		<div class="card">
+			<div class="card-header"><h5 class="card-header"><a href="{% url 'show-driver' driver.id %}" class="link-dark link-offset-1 link-underline-opacity-25 link-underline-opacity-75-hover">{{ driver }}</a></h5></div>
+			<div class="card-body">
+				<p class="card-text">
+    				<ul>
+						<li><b>First Name:</b> {{ driver.first_name }}</li>
+						<li><b>Last Name:</b> {{ driver.last_name }}</li>
+						<li><b>Phone Number:</b> {{ driver.phone }}</li>
+					</ul>
+    			</p>
+  			</div>
+  			{% if user.is_superuser %}
+	  			<div class="card-footer text-body-secondary d-flex justify-content-between">
+	  				<div>
+	        			<a href="{% url 'update-driver' driver.id %}" class="btn btn-outline-secondary btn-sm">Update</a>
+	        			<a href="{% url 'delete-driver' driver.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+	    			</div>
+	    			<div class="btn-group" role="group">
+	    				<button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Download</button>
+	    				<ul class="dropdown-menu">
+	    					<li><a class="dropdown-item" href="{% url 'spec_driver_text' driver.id %}" class="btn btn-outline-primary btn-sm">Text</a></li>
+	    					<li><a class="dropdown-item" href="{% url 'spec_driver_csv' driver.id %}">CSV</a></li>
+	    					<li><a class="dropdown-item" href="{% url 'spec_driver_pdf' driver.id %}">PDF</a></li>
+	    				</ul>
+	    			</div>
+				</div>
+			{% endif %}
+		</div>
+		<br>
+	{% endfor %}
+
+	<a href="{% url 'add-driver' %}" class="btn btn-secondary">Add Driver</a>
+	
+
+{% endblock %}

@@ -1,0 +1,83 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Transport System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Bookings
+          </a>
+          <ul class="dropdown-menu">
+            {% if user.is_authenticated %}
+              <li><a class="dropdown-item" href="{% url 'add-booking' %}">Add Booking</a></li>
+            {% endif %}
+            {% if user.is_superuser %}
+              <li><a class="dropdown-item" href="{% url 'my-bookings' %}">My Bookings</a></li>
+              <li><a class="dropdown-item" href="{% url 'bookings-list' %}">All Bookings</a></li>
+            {% endif %}
+          </ul>
+        </li>
+
+        {% if user.is_superuser %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Admin
+              {% if new_booking_count > 0 %}
+                <span class="badge bg-danger">{{ new_booking_count }}</span>
+              {% endif %}
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="{% url 'booking_notifications' %}">Notifications</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'approval' %}">Approve Bookings</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'vehicles-list' %}">Vehicles</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'drivers-list' %}">Drivers</a>
+              </li>
+            </ul>
+          </li>
+        {% endif %}
+      </ul>
+      {% if user.is_authenticated %}
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ user }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="{% url 'update_password' %}">Change Password</a></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      {% else %}
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">Register</a>
+          </li>
+        </ul>
+      {% endif %}
+      </ul>
+      <form class="d-flex" method=POST action="{% url 'search' %}">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Search" name="searched" aria-label="Search">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>

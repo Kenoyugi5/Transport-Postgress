@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <h2 class="text-center mb-4">Booking of Transport</h2>
+
+        {% if notifications %}
+          <div class="alert alert-info alert-dismissible fade show" role="alert">
+            You have {{ notifications.count }} new notifications.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endif %}
+
+        <!-- Centering the calendar -->
+        <div class="d-flex justify-content-center mb-4">
+          <div class="calendar-container">
+            {{ cal|safe }}
+          </div>
+        </div>
+
+        <!-- Bookings list -->
+        <div class="card mb-4">
+          <h4 class="card-header">Bookings this month</h4>
+            <ul class="list-group list-group-flush">
+              {% for booking in booking_list %}
+                <li class="list-group-item">
+                  <a href="{% url 'show-booking' booking.id %}" class="text-decoration-none">
+                    {{ booking.subject }}
+                  </a> - {{ booking.trip_date }}
+                </li>
+              {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Pagination controls -->
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            {% if booking_list.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page=1">&laquo; First</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ booking_list.previous_page_number }}">Previous</a>
+              </li>
+            {% endif %}
+
+            {% for i in booking_list.paginator.page_range %}
+              {% if booking_list.number == i %}
+                <li class="page-item active">
+                  <span class="page-link">{{ i }}</span>
+                </li>
+              {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+
+            {% if booking_list.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ booking_list.next_page_number }}">Next</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ booking_list.paginator.num_pages }}">Last &raquo;</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

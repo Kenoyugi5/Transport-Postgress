@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<div class="card">
+		<div class="card-header"><h5 class="card-header">Vehicle {{ vehicle.id }}</h5></div>
+		<div class="card-body">
+			<p class="card-text">
+    			<ul>
+					<li><b>Licence Plate:</b> {{ vehicle.licence_plate }}</li>
+					<li><b>Type:</b> {{ vehicle.description }}</li>
+				</ul>
+				<br>
+				{% if vehicle.vehicle_image %}
+					<img src="{{ vehicle.vehicle_image.url }}">
+				{% endif %}
+    		</p>
+    		<h3 class="card-title">Bookings for this Vehicle</h3>
+    		{% if bookings %}
+    		<p class="card-text">
+    			{% for booking in bookings %}
+    				{% if booking.approved %}
+    					<a href="{% url 'show-booking' booking.id %}" class="link-dark link-offset-1 link-underline-opacity-25 link-underline-opacity-75-hover">{{ booking }} - {{ booking.trip_date }} - ({{ booking.Days_till }}) {% if booking.Is_Past %} ({{ booking.Is_Past }}) {% endif %}</a><br>
+    				{% endif %}
+    			{% endfor %}
+    		</p>
+    		<br>
+    		{% else %}
+    			<p>No bookings currently</p>
+    			<br>
+    		{% endif %}
+  		</div>
+	</div>
+
+{% endblock %}

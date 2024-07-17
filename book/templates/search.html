@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    {% if searched %}
+        <h1 class="mt-4 mb-3">Search Results for "{{ searched }}"</h1>
+        {% if bookings %}
+            {% for booking in bookings %}
+              <div class="card mb-4">
+                <div class="card-header">
+                  <h5 class="card-title">{{ booking }}</h5>
+                </div>
+                <div class="card-body">
+                  <h6 class="card-subtitle mb-2 text-muted"><b>Teacher:</b> {{ booking.teacher }}</h6>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Subject/Department:</b> {{ booking.subject }}</li>
+                    <li class="list-group-item"><b>Classes Involved:</b> {{ booking.class_involved }}</li>
+                    <li class="list-group-item"><b>Total No. of People:</b> {{ booking.no_of_people }}</li>
+                    <li class="list-group-item"><b>Purpose:</b> {{ booking.purpose }}</li>
+                    <li class="list-group-item"><b>Trip Date:</b> {{ booking.trip_date }}</li>
+                    <li class="list-group-item"><b>Destination:</b> {{ booking.destination }}</li>
+                    <li class="list-group-item"><b>Departure Time:</b> {{ booking.departure_time }}</li>
+                    <li class="list-group-item"><b>Transport Back:</b> {{ booking.transport_back|yesno:"Yes,No" }}</li>
+                    {% if booking.transport_back %}
+                      <li class="list-group-item"><b>Approx. Time Back:</b> {{ booking.approx_time_back }}</li>
+                    {% endif %}
+                    <li class="list-group-item"><b>Date:</b> {{ booking.date_created }}</li>
+                    {% for vehicle in booking.vehicle.all %}
+                      <li class="list-group-item"><b>Vehicle Assigned:</b> {{ vehicle }}</li>
+                    {% endfor %}
+                    {% for driver in booking.driver.all %}
+                      <li class="list-group-item"><b>Name of Driver Assigned:</b> {{ driver }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+              No bookings found matching your search criteria.
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info" role="alert">
+          You forgot to search for a booking.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

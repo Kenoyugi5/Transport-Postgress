@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">{{ booking }}</h5>
+      </div>
+      <div class="card-body">
+        <h5 class="card-subtitle mb-2 text-muted"><b>Teacher:</b> {{ booking.teacher }}</h5>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><b>Subject/Department:</b> {{ booking.subject }}</li>
+          <li class="list-group-item"><b>Classes Involved:</b> {{ booking.class_involved }}</li>
+          <li class="list-group-item"><b>Total No. of People:</b> {{ booking.no_of_people }}</li>
+          <li class="list-group-item"><b>Purpose:</b> {{ booking.purpose }}</li>
+          <li class="list-group-item"><b>Trip Date:</b> {{ booking.trip_date }}</li>
+          <li class="list-group-item"><b>Destination:</b> {{ booking.destination }}</li>
+          <li class="list-group-item"><b>Departure Time:</b> {{ booking.departure_time }}</li>
+          <li class="list-group-item"><b>Transport Back:</b> {{ booking.transport_back|yesno:"Yes,No" }}</li>
+          {% if booking.transport_back %}
+            <li class="list-group-item"><b>Approx. Time Back:</b> {{ booking.approx_time_back }}</li>
+          {% endif %}
+          <li class="list-group-item"><b>Date:</b> {{ booking.date_created }}</li>
+          <li class="list-group-item">
+            <b>Vehicles Assigned:</b>
+            {% for vehicle in booking.vehicle.all %}
+              {{ vehicle }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </li>
+          <li class="list-group-item">
+            <b>Drivers Assigned:</b>
+            {% for driver in booking.driver.all %}
+              {{ driver }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

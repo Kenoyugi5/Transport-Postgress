@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_superuser %}
+	<h1>Update Vehicle</h1>
+	<br>
+	<form action="", method=POST enctype="multipart/form-data">
+		{% csrf_token %}
+			{{ form.as_p }}
+		<br>
+	
+		<input type="submit" value="Update" class="btn btn-secondary">
+	</form>
+
+{% else %}
+	<h1>Login to view page</h1>
+	<a href="{% url 'login' %}">Login</a>
+
+{% endif %}
+
+{% endblock %}
